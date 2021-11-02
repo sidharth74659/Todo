@@ -2,17 +2,36 @@
 
 with mongodb and user authentication
 
+# Table of contents
+
+- [Tailwind CSS Setup](#tailwind-css-setuphttpswwwyoutubecomwatchvztjxyiq0nquab_channeljamesqquick)
+  - [Installing](#installing)
+  - [Folders](#folders)
+  - [including components required in our stylesheet](#including-components-required-in-our-stylesheet)
+  - [Create a tailwind-config file](#create-a-tailwind-config-file)
+  - [config file for postcss](#config-file-for-postcss)
+  - [Writing a build-script to run the tailwind css in `package.json`](#writing-a-build-script-to-run-the-tailwind-css-in-packagejson)
+  - [Link tailwindcss inside your `index.html`](#link-tailwindcss-inside-your-indexhtml)
+  - [Checking if tailwind is runnning or not](#checking-if-tailwind-is-runnning-or-not)
+- [Polishing](#polishing)
+  - [Enable dynamic build only for production](#enable-dynamic-build-only-for-production)
+  - [Conditionally build/ optimize stylesheet](#conditionally-build-optimize-stylesheet)
+
+
+
 ### [Tailwind CSS Setup](https://www.youtube.com/watch?v=zTjxyIq0nqU&ab_channel=JamesQQuick)
 
-#### Installing :
+#### Installing
 
     npm install tailwindcss
 
-#### Folders :
+#### Folders
 
     mkdir css && cd css && touch styles.css
 
-#### Define what components we want to include inside styles.css
+#### including components required in our stylesheet
+
+Define what components we want to include inside styles.css
 
     /* copy these into css/styles.css */
 
@@ -20,20 +39,24 @@ with mongodb and user authentication
     @tailwind components;
     @tailwind utilities;
 
-#### create a config file to reference the above styles by running the following command
+#### Create a tailwind-config file
+
+To reference the above styles by running the following command, we create a config file for tailwind.
+
 
     /* in project root directory */
-
     npx tailwindcss init
 
 You can see the config file created as `Created Tailwind CSS config file: tailwind.config.js`
 
-Note : Few might need to install `autoprefixer`, `postcss-cli` and `watch`...
+> Note : Few might need to install `autoprefixer`, `postcss-cli` and `watch`...
 To install those run :
 
     npm install autoprefixer postcss-cli watch
 
-#### configuration file for postcss
+#### config file for postcss
+
+- [Why do we need to add PostCSS and Autoprefixer as well?](https://daily.dev/blog/how-to-use-tailwindcss-with-node-js-express-and-pug#add-tailwindcss)
 
 create a `postcss.config.js` file and insert the following
 
@@ -41,7 +64,9 @@ create a `postcss.config.js` file and insert the following
     plugins: [require('tailwindcss'), require('autoprefixer')]
     }
 
-#### writing a script to run the tailwind css in `package.json`
+If you want to change the file-name/ folder of `tailwind.config.js` Visit [here](https://tailwindcss.com/docs/configuration#using-a-different-file-name)
+
+#### Writing a build-script to run the tailwind css in `package.json`
 
     /*  <command_to_run> : "postcss <file-to-compile> <flag to mention the output folder(-o)> <output-file-path_to_store_build/compiled_css> " */
 
@@ -55,7 +80,7 @@ create a `postcss.config.js` file and insert the following
 - uses tailwindcss && autoprefixer as we mentioned in `postcss.config.js`
 - and generate the output-file in `build/styles.css` (see the contents in this file after build)
 
-#### link tailwindcss inside your `index.html`
+#### Link tailwindcss inside your `index.html`
 
 You can now include the build css(output-file : `build/styles.css`) inside your html
 
@@ -73,7 +98,7 @@ if yes : congrats!!! you setup the tailwind in your project
 
 ### Polishing
 
-####
+#### Enable dynamic build only for production
 
 If you see the `build/styles.css` you can see it has more than 4k lines of code which is not that necessary for your project, to optimize it :
 
@@ -81,7 +106,7 @@ If you see the `build/styles.css` you can see it has more than 4k lines of code 
 
       purge: {enabled : true, content: ['./public/*.html']},
 
-- where the value of `content` is the location of your `.html` file that you are using the tailwind in... If there are multiple html files, you can add them inside the `content` array
+- where the value of `content` is the location of your `.html` file that you are using the tailwind in... If there are multiple html files, you can add them inside the `content` array.
 
 - And then in terminal :
 
@@ -89,7 +114,7 @@ If you see the `build/styles.css` you can see it has more than 4k lines of code 
 
 - Now you can see the `build/styles.css` contains less/ optimised code than before (probably less than 1000 lines)
 
-Overview :
+> Overview :
 
 - Try searching for the class `text-red-500` in `build/styles.css`, if you can't find it...
 
