@@ -4,7 +4,9 @@
   "description": "with mongodb and user authentication",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "build" : "postcss css/styles.css -o build/styles.css",
+    "watch" : "watch `npm run build` ./dist"
   },
   "repository": {
     "type": "git",
@@ -17,11 +19,15 @@
   },
   "homepage": "https://github.com/sidharth74659/Todo#readme",
   "dependencies": {
+    "autoprefixer": "^10.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.10",
     "passport": "^0.5.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "postcss-cli": "^9.0.1",
+    "tailwindcss": "^2.2.19",
+    "watch": "^1.0.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.13"
