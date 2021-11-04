@@ -24,11 +24,21 @@ app.get('/dashboard', (req, res) => {
     res.sendFile('index.html', { root: path.join(__dirname, './public/') })
 
 })
+
+app.get('/signup', (req, res) => {
+    res.sendFile('signup.html', { root: path.join(__dirname, './public/login') })
+
+})
+
 // // Routes
-app.use('/login', authRoute)
+// app.use('/signin', authRoute)
+app.use('/signin', (req, res) => {
+    res.sendFile('login.html', { root: path.join(__dirname, './public/login') })
+
+})
 
 // // LISTEN TO PORT
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 5000
 
 app.listen(port, () => {
     console.log(`running ${port}`);

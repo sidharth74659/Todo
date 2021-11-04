@@ -16,7 +16,6 @@ router.get('/google', () => {
 
 });
 
-
 // @desc Auth with Google
 // @route GET /login/google/callback
 router.get('/google/callback',

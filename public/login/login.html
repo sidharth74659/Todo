@@ -8,7 +8,7 @@
         <title>Login Page</title>
 
         <link rel="stylesheet" href="../css/styles.css">
-        <script type="module" src="./firebase.js"></script>
+        <!-- <script type="module" src="./firebase.js"></script> -->
 
     </head>
 
@@ -91,7 +91,7 @@
                                 <!-- Heroicon name: solid/lock-closed -->
                                 <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                    aria-hidden=giti "true">
+                                    aria-hidden="true">
                                     <path fill-rule="evenodd"
                                         d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
                                         clip-rule="evenodd" />
@@ -103,6 +103,51 @@
                 </form>
             </div>
         </div>
+
+
+
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+        <script>
+
+            // * FIRST initializeApp then anything after
+                firebase.initializeApp({
+                    apiKey: "AIzaSyD-dQ1LyPjots2qb6ZoDYz74F9G2GInAEY",
+                    authDomain: "todo-200720.firebaseapp.com",
+                    databaseURL: "https://todo-200720.firebaseio.com",
+                    projectId: "todo-200720",
+                    storageBucket: "todo-200720.appspot.com",
+                    messagingSenderId: "241273295218",
+                    appId: "1:241273295218:web:5126f5ad87dd409ffb4deb",
+                    measurementId: "G-10HRN3PDGM"
+                });
+
+            // const auth = getAuth(firebaseApp);
+            document.querySelector('#sign-in').addEventListener('click', signUser)
+
+
+            function signUser(e) {
+                e.preventDefault();
+                const userEmail = document.querySelector('#email-address').value
+                const userPassword = document.querySelector('#password').value
+
+                firebase.auth().signInWithEmailAndPassword( userEmail, userPassword)
+                    .then((userCredential) => {
+                        // Signed in 
+                        const user = userCredential.user;
+                        // ...
+                        console.log("signed- in")
+                        console.log(user);
+                        window.location.assign('../dashboard')
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+
+                        alert(errorCode + errorMessage)
+                    });
+            }
+
+        </script>
     </body>
 
 </html>

@@ -8,7 +8,6 @@ with mongodb and user authentication
 
 ### [Firebase Setup](https://www.youtube.com/watch?v=rQvOAnNvcNQ&ab_channel=Firebase)
 
-
 #### Installation
 
 After npm setup :
@@ -21,6 +20,9 @@ Create a folder `src` and inside it a `firebase.js` file and include following c
 
 Then, initialize Firebase and begin using the SDKs : that is available in your Firebase -> Project Settings -> General (Scroll Down) and you'll find code similar to this
 
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "firebase/app";
     // TODO: Add SDKs for Firebase products that you want to use
@@ -39,13 +41,11 @@ Then, initialize Firebase and begin using the SDKs : that is available in your F
     measurementId: "G-10HRN3PDGM"
     };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-
+    // Initialize Firebase FIRST before anything else
+    const firebaseApp = initializeApp(firebaseConfig);
+    const auth = getAuth(firebaseApp);
 
 This is how firebase SDK knows how to connect to your specific firebase project
-
 
 #### Using a firebase service
 
@@ -55,7 +55,41 @@ The basic syntax is :
 
 For auth, we use `auth` service and import `getAuth`
 
-    import { getAuth } from "firebase/auth";
+    <!-- if you don't use module bundler, you can use these scripts -->
+    import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.2.0/firebase-auth.js';
 
-    
+- we use `onAuthStateChanged` to observe the changes if a user is signed in/ logged out
+- `createUserWithEmailAndPassword` is used(the name itself explains) and should be enabled in your Project -> Authentication(on left pane) -> Sign-in Method (tab) -> click 'Add new provider' and enable 'Email/Password'.
 
+### Authentication
+
+Handle/ call these functions by adding an event listener to a sign-up/ sign-in button
+
+#### To create a user
+
+         createUserWithEmailAndPassword(auth, userEmail, userPassword)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ..
+        });
+
+
+#### To Sign-in a user
+
+
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            // ...
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // ...
+        });

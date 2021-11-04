@@ -3,7 +3,15 @@
 // import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js';
-import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.2.0/firebase-auth.js';
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut
+} from 'https://www.gstatic.com/firebasejs/9.2.0/firebase-auth.js';
+
 
 // * FIRST initializeApp then anything after
 const firebaseApp = initializeApp({
@@ -17,60 +25,77 @@ const firebaseApp = initializeApp({
     measurementId: "G-10HRN3PDGM"
 });
 
-const signUp = document.querySelector('#sign-in')
 const auth = getAuth(firebaseApp);
+
+const sign_in = document.querySelector('#sign-in')
+const sign_up = document.querySelector('#sign-up')
+const sign_out = document.querySelector('#sign-out')
 
 onAuthStateChanged(auth, user => {
     if (user !== null) {
-        console.log('logged in');
-        signUp.textContent = 'Sign In'
-        window.location.assign('../dashboard')
+        sign_out.style.display = 'block';
+        sign_in.style.display = 'none'
+        sign_up.style.display = 'none'
+
+        sign_out.addEventListener('click', signOutUser)
     } else {
-        console.log('No user');
-        signUp.textContent = 'Sign Up'
-        signUp.addEventListener('click', createUser)
+        sign_out.style.display = 'none'
+        sign_in.style.display = 'block'
+        sign_up.style.display = 'block'
+
+        document.querySelector('#log-in').addEventListener('click', signUser)
+        document.querySelector('#create-account').addEventListener('click', createUser)
     }
 })
 
+function signOutUser(e) {
+    e.preventDefault()
+
+    signOut(auth)
+}
 
 function createUser(e) {
     e.preventDefault();
-    const userEmail = document.querySelector('#email-address').value
-    const userPassword = document.querySelector('#password').value
 
-    // auth.createUserWithEmailAndPassword(userEmail, userPassword)
+    const userEmail = document.querySelector('#email-address').value
+    const userPassword = document.querySelector('#pass').value
+
     createUserWithEmailAndPassword(auth, userEmail, userPassword)
         .then((userCredential) => {
-            console.log("signed- up")
             // Signed in 
             const user = userCredential.user;
             // ...
-            console.log(user);
 
+            toggleModal("default-modal-signup", false);
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             // ..
 
-            alert(errorCode)
+            alert(errorCode + errorMessage)
         });
 }
 
 function signUser(e) {
     e.preventDefault();
 
-    signInWithEmailAndPassword(auth, email, password)
+    const userEmail = document.querySelector('#login-email').value
+    const userPassword = document.querySelector('#login-password').value
+
+    signInWithEmailAndPassword(auth, userEmail, userPassword)
         .then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
             // ...
-            console.log("signed- in")
-            console.log(user);
+
+            // toggleModal("default-modal-login", document.getElementById("default-modal-login").hasAttribute('aria-hidden', 'true'));
+            toggleModal("default-modal-login", false);
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-        });
 
+            alert(errorCode + errorMessage)
+        });
 }
